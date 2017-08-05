@@ -3,13 +3,17 @@ const hbs = require('hbs');
 const fs = require('fs');
 
 // heroku will set an env PORT value
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
+// set to true to route traffic to maintenance page
+const MAINTENANCE = false;
 
 var app = express();
 
-
+// partials are blocks of very reusable html/hbs code
 hbs.registerPartials(__dirname + '/views/partials');
 
+// helpers are essentially used the same way as the variables
+// but they execute a function
 hbs.registerHelper('getCurrentYear', () => {
 	return new Date().getFullYear();
 });
@@ -18,7 +22,7 @@ hbs.registerHelper('screamIt', (text) => {
 	return text.toUpperCase();
 });
 
-
+// set templating engine to handlebars
 app.set('view engine', 'hbs');
 
 // using middleware to add functionality
@@ -35,10 +39,12 @@ app.use((req, res, next) => {
 	next();
 });
 
-// interrupt site and render maintenance page
-// app.use((req, res, next) => {
-// 	res.render('maintenance.hbs');
-// });
+if (MAINTENANCE) {
+	//interrupt site and render maintenance page
+	app.use((req, res, next) => {
+		res.render('maintenance.hbs');
+	});
+}
 
 // using a static directory instead of handlers
 app.use(express.static(__dirname + '/public'));
@@ -69,6 +75,6 @@ app.get('/bad', (req, res) => {
 	});
 });
 
-app.listen(port, () => {
-	console.log(`Server is up on port ${port}`);
+app.listen(PORT, () => {
+	console.log(`Server is up on port ${PORT}`);
 });
