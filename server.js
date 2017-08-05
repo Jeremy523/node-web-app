@@ -43,6 +43,7 @@ app.use((req, res, next) => {
 // using a static directory instead of handlers
 app.use(express.static(__dirname + '/public'));
 
+// handlers galore!
 app.get('/', (req, res) => {
 	res.render('home.hbs', {
 		pageTitle: 'Home',
@@ -53,6 +54,12 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
 	res.render('about.hbs', {
 		pageTitle: 'About Page'
+	});
+});
+
+app.get('/projects', (req, res) => {
+	res.render('projects.hbs', {
+		pageTitle: 'Personal Projects'
 	});
 });
 
